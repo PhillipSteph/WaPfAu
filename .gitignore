@@ -1,0 +1,42 @@
+# Flutter/Dart/Pub related
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+
+# Build outputs
+build/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/App.framework
+android/app/debug
+android/app/profile
+android/app/release
+
+# Symbolication
+app.*.symbols
+
+# Obfuscation
+app.*.map.json
+
+# Android Studio specific
+.idea/
+*.iml
+.gradle/
+local.properties
+captures/
+.cxx/
+
+# VS Code (in case you open project there too)
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Linux swap files
+*.swp
