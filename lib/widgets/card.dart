@@ -27,7 +27,7 @@ class CourseCard extends StatelessWidget {
     return ConstrainedBox(
       constraints: const BoxConstraints(minWidth: double.infinity),
       child: Card(
-        elevation: 2,
+        elevation: 1,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Padding(
           padding: const EdgeInsets.all(16),
