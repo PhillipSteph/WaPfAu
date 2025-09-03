@@ -14,6 +14,8 @@ class MyCoursePage extends StatefulWidget {
 }
 
 class _MyCoursesPageState extends State<MyCoursePage> {
+  int maxCourses = 2;
+
   final courseService = CourseService();
   late final List<Course> courses;
 
@@ -29,7 +31,7 @@ class _MyCoursesPageState extends State<MyCoursePage> {
     setState(() {
       if (selectedCourses.contains(c)) {
         selectedCourses.remove(c);
-      } else {
+      } else if (selectedCourses.length < maxCourses) {
         selectedCourses.add(c);
       }
     });
@@ -50,6 +52,7 @@ class _MyCoursesPageState extends State<MyCoursePage> {
             course: course,
             isSelected: isSelected,
             onToggleSelect: () => _toggleSelection(course),
+            canBeChosen: selectedCourses.length < maxCourses
           );
         },
       ),

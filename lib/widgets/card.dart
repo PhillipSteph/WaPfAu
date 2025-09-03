@@ -6,12 +6,14 @@ class CourseCard extends StatelessWidget {
   final Course course;
   final bool isSelected;
   final VoidCallback onToggleSelect;
+  final bool canBeChosen;
 
   const CourseCard({
     super.key,
     required this.course,
     required this.isSelected,
     required this.onToggleSelect,
+    required this.canBeChosen
   });
 
   @override
@@ -100,7 +102,7 @@ class CourseCard extends StatelessWidget {
                   const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
                     color: Colors.red.shade700,
-                    borderRadius: BorderRadius.circular(999),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
                     '$seatsLeft Plätze frei',
@@ -114,7 +116,7 @@ class CourseCard extends StatelessWidget {
                   const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
                     color: theme.disabledColor.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(999),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                   child:
                   Text('Ausgebucht', style: theme.textTheme.labelLarge),
@@ -133,9 +135,9 @@ class CourseCard extends StatelessWidget {
                   ).copyWith(
                     // pressed state should be red
                     backgroundColor:
-                    MaterialStateProperty.resolveWith<Color>((states) {
-                      if (states.contains(MaterialState.pressed)) {
-                        return Colors.red;
+                    WidgetStateProperty.resolveWith<Color>((states) {
+                      if (states.contains(WidgetState.pressed) && !canBeChosen ) {
+                        return Colors.red.shade700;
                       }
                       return normalBg;
                     }),
