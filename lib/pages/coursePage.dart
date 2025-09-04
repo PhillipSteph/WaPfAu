@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wapfau/models/user.dart';
+import 'package:wapfau/services/coreService.dart';
 
 import '../models/course.dart';
 import '../services/courseService.dart';
@@ -6,19 +8,20 @@ import '../widgets/card.dart';
 
 
 class MyCoursePage extends StatefulWidget {
-  const MyCoursePage({super.key, required this.title});
+  const MyCoursePage({super.key, required this.title, required this.coreService});
   final String title;
-
+  final CoreService coreService;
   @override
   State<MyCoursePage> createState() => _MyCoursesPageState();
 }
 
 class _MyCoursesPageState extends State<MyCoursePage> {
-  int maxCourses = 2;
+ // eigentlich müsste man hier irgendwie auf die coreService instanz zugreifen können
+  int maxCourses = CoreService.getMaxCourses();
+  User user = CoreService.getUser();
+  final courseService = CoreService.getCourseService();
 
-  final courseService = CourseService();
   late final List<Course> courses;
-
   final List<Course> selectedCourses = [];
 
   @override

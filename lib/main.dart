@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wapfau/pages/coursePage.dart';
+import 'package:wapfau/services/coreService.dart';
 import 'package:wapfau/services/courseService.dart';
 import 'package:wapfau/widgets/card.dart';
 
@@ -34,11 +35,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  CoreService coreService = CoreService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-          child: MyCoursePage(title: 'Kurse')
+          child: MyCoursePage(title: 'Kurse', coreService: coreService)
       ),
     );
   }
