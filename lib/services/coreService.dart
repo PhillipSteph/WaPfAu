@@ -1,6 +1,7 @@
 
 import 'package:wapfau/services/courseService.dart';
 
+import '../models/course.dart';
 import '../models/user.dart';
 
 // Kern informationen und Schnittstellen der Anwendungen,
@@ -12,6 +13,7 @@ class CoreService {
   static late User user;
   static late int maxCourses;
   static late CourseService courseService;
+  static List<Course> selectedCourses = [];
 
   static initCore(){
     user = User(nachname: "Schweiß", vorname: "Axel", matrNR: "G230025PI");

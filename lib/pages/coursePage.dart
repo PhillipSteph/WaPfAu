@@ -22,7 +22,6 @@ class _MyCoursesPageState extends State<MyCoursePage> {
   final courseService = CoreService.getCourseService();
 
   late final List<Course> courses;
-  final List<Course> selectedCourses = [];
 
   @override
   void initState() {
@@ -32,10 +31,10 @@ class _MyCoursesPageState extends State<MyCoursePage> {
 
   void _toggleSelection(Course c) {
     setState(() {
-      if (selectedCourses.contains(c)) {
-        selectedCourses.remove(c);
-      } else if (selectedCourses.length < maxCourses) {
-        selectedCourses.add(c);
+      if (CoreService.selectedCourses.contains(c)) {
+        CoreService.selectedCourses.remove(c);
+      } else if (CoreService.selectedCourses.length < maxCourses) {
+        CoreService.selectedCourses.add(c);
       }
     });
   }
@@ -50,12 +49,12 @@ class _MyCoursesPageState extends State<MyCoursePage> {
         separatorBuilder: (_, __) => const SizedBox(height: 12),
         itemBuilder: (context, i) {
           final course = courses[i];
-          final isSelected = selectedCourses.contains(course);
+          final isSelected = CoreService.selectedCourses.contains(course);
           return CourseCard(
             course: course,
             isSelected: isSelected,
             onToggleSelect: () => _toggleSelection(course),
-            canBeChosen: selectedCourses.length < maxCourses
+            canBeChosen: CoreService.selectedCourses.length < maxCourses
           );
         },
       ),
