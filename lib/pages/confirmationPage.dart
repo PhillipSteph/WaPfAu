@@ -49,12 +49,12 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
     return Scaffold(
       body:
       Container(
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 60),
         child: Column(
           children: [
             ConfirmationBanner(),
-            SpacerWidget(),
-            ConfirmationCourses(selectedCourses: widget.coreService.selectedCourses),
+            SpacerWidget(height: 24),
+            ConfirmationCourses(selectedCourses: widget.coreService.selectedCourses, coreService: widget.coreService),
           ],
         )
       ),
