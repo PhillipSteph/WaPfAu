@@ -1,38 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:wapfau/models/user.dart';
+import 'package:wapfau/services/coreService.dart';
 
 import '../models/course.dart';
 import '../services/courseService.dart';
 import '../widgets/card.dart';
 
 
-class MyCoursePage extends StatefulWidget {
-  const MyCoursePage({super.key, required this.title});
+class CoursePage extends StatefulWidget {
+  const CoursePage({super.key, required this.title, required this.coreService});
   final String title;
-
+  final CoreService coreService;
   @override
-  State<MyCoursePage> createState() => _MyCoursesPageState();
+  State<CoursePage> createState() => _CoursesPageState();
 }
 
-class _MyCoursesPageState extends State<MyCoursePage> {
-  int maxCourses = 2;
-
-  final courseService = CourseService();
-  late final List<Course> courses;
-
-  final List<Course> selectedCourses = [];
+class _CoursesPageState extends State<CoursePage> {
+  late int maxCourses;
+  late User user;
+  late CourseService courseService;
+  late List<Course> courses;
 
   @override
   void initState() {
     super.initState();
-    courses = courseService.getAllCourses();
+    maxCourses = widget.coreService.getMaxCourses();
+    user = widget.coreService.getUser();
+    courseService = widget.coreService.getCourseService();
+
+    // Load courses here
+    courses = courseService.getAllCourses(); // <-- adjust to your API
   }
 
   void _toggleSelection(Course c) {
     setState(() {
-      if (selectedCourses.contains(c)) {
-        selectedCourses.remove(c);
-      } else if (selectedCourses.length < maxCourses) {
-        selectedCourses.add(c);
+      if (widget.coreService.selectedCourses.contains(c)) {
+        widget.coreService.selectedCourses.remove(c);
+      } else if (widget.coreService.selectedCourses.length < maxCourses) {
+        widget.coreService.selectedCourses.add(c);
       }
     });
   }
@@ -40,19 +45,18 @@ class _MyCoursesPageState extends State<MyCoursePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Kurswahl')),
       body: ListView.separated(
         padding: const EdgeInsets.all(16),
         itemCount: courses.length,
         separatorBuilder: (_, __) => const SizedBox(height: 12),
         itemBuilder: (context, i) {
           final course = courses[i];
-          final isSelected = selectedCourses.contains(course);
+          final isSelected = widget.coreService.selectedCourses.contains(course);
           return CourseCard(
             course: course,
             isSelected: isSelected,
             onToggleSelect: () => _toggleSelection(course),
-            canBeChosen: selectedCourses.length < maxCourses
+            canBeChosen: widget.coreService.selectedCourses.length < maxCourses
           );
         },
       ),
