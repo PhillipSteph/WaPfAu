@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:wapfau/widgets/confirmation/confirmationBanner.dart';
 
+import '../services/coreService.dart';
+
 class ConfirmationPage extends StatefulWidget {
-  const ConfirmationPage({super.key});
+  final CoreService coreService;
+  const ConfirmationPage({super.key, required this.coreService});
   @override
   State<ConfirmationPage> createState() => _ConfirmationPageState();
 }

@@ -1,39 +1,48 @@
-
 import 'package:wapfau/services/courseService.dart';
 
 import '../models/course.dart';
 import '../models/user.dart';
 
-// Kern informationen und Schnittstellen der Anwendungen,
-// welche keine instanzen benötigen
-
+// Kerninformationen und Schnittstellen der Anwendungen,
+// jetzt als normale Instanz, nicht mehr statisch
 class CoreService {
-  static bool hasBeenInitialized = false;
+  bool hasBeenInitialized = false;
 
-  static late User user;
-  static late int maxCourses;
-  static late CourseService courseService;
-  static List<Course> selectedCourses = [];
+  late User user;
+  late int maxCourses;
+  late CourseService courseService;
+  List<Course> selectedCourses = [];
 
-  static initCore(){
-    user = User(nachname: "Schweiß", vorname: "Axel", matrNR: "G230025PI");
-    courseService = CourseService();
-    maxCourses = 2;
+  CoreService() {
+    _initCore();
   }
 
-  static User getUser() {
-    if (!hasBeenInitialized) initCore();
+  void _initCore() {
+    if (hasBeenInitialized) return;
+
+    user = User(
+      nachname: "Schweiß",
+      vorname: "Axel",
+      matrNR: "G230025PI",
+    );
+    courseService = CourseService();
+    maxCourses = 2;
+
+    hasBeenInitialized = true;
+  }
+
+  User getUser() {
+    if (!hasBeenInitialized) _initCore();
     return user;
   }
 
-  static int getMaxCourses() {
-    if (!hasBeenInitialized) initCore();
+  int getMaxCourses() {
+    if (!hasBeenInitialized) _initCore();
     return maxCourses;
   }
 
-  static CourseService getCourseService() {
-    if (!hasBeenInitialized) initCore();
+  CourseService getCourseService() {
+    if (!hasBeenInitialized) _initCore();
     return courseService;
   }
 }
-

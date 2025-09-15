@@ -16,25 +16,28 @@ class CoursePage extends StatefulWidget {
 }
 
 class _CoursesPageState extends State<CoursePage> {
- // eigentlich müsste man hier irgendwie auf die coreService instanz zugreifen können
-  int maxCourses = CoreService.getMaxCourses();
-  User user = CoreService.getUser();
-  final courseService = CoreService.getCourseService();
-
-  late final List<Course> courses;
+  late int maxCourses;
+  late User user;
+  late CourseService courseService;
+  late List<Course> courses;
 
   @override
   void initState() {
     super.initState();
-    courses = courseService.getAllCourses();
+    maxCourses = widget.coreService.getMaxCourses();
+    user = widget.coreService.getUser();
+    courseService = widget.coreService.getCourseService();
+
+    // Load courses here
+    courses = courseService.getAllCourses(); // <-- adjust to your API
   }
 
   void _toggleSelection(Course c) {
     setState(() {
-      if (CoreService.selectedCourses.contains(c)) {
-        CoreService.selectedCourses.remove(c);
-      } else if (CoreService.selectedCourses.length < maxCourses) {
-        CoreService.selectedCourses.add(c);
+      if (widget.coreService.selectedCourses.contains(c)) {
+        widget.coreService.selectedCourses.remove(c);
+      } else if (widget.coreService.selectedCourses.length < maxCourses) {
+        widget.coreService.selectedCourses.add(c);
       }
     });
   }
@@ -42,19 +45,18 @@ class _CoursesPageState extends State<CoursePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Kurswahl')),
       body: ListView.separated(
         padding: const EdgeInsets.all(16),
         itemCount: courses.length,
         separatorBuilder: (_, __) => const SizedBox(height: 12),
         itemBuilder: (context, i) {
           final course = courses[i];
-          final isSelected = CoreService.selectedCourses.contains(course);
+          final isSelected = widget.coreService.selectedCourses.contains(course);
           return CourseCard(
             course: course,
             isSelected: isSelected,
             onToggleSelect: () => _toggleSelection(course),
-            canBeChosen: CoreService.selectedCourses.length < maxCourses
+            canBeChosen: widget.coreService.selectedCourses.length < maxCourses
           );
         },
       ),

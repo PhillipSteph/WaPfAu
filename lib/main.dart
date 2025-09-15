@@ -45,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
         padding: EdgeInsets.only(top: 48), // for notches
           child:
           CoursePage(title: 'Kurse', coreService: coreService)
-          //ConfirmationPage()
+          //ConfirmationPage(coreService: coreService,)
       ),
     );
   }
