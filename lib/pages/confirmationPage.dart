@@ -1,19 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:wapfau/models/user.dart';
-import 'package:wapfau/services/coreService.dart';
+import 'package:wapfau/widgets/confirmation/confirmationBanner.dart';
 
-import '../models/course.dart';
-import '../services/courseService.dart';
-import '../widgets/card.dart';
-
-
-class MyConfirmationPage extends StatefulWidget {
-  const MyConfirmationPage({super.key});
+class ConfirmationPage extends StatefulWidget {
+  const ConfirmationPage({super.key});
   @override
-  State<MyConfirmationPage> createState() => _MyConfirmationPageState();
+  State<ConfirmationPage> createState() => _ConfirmationPageState();
 }
 
-class _MyConfirmationPageState extends State<MyConfirmationPage> {
+class _ConfirmationPageState extends State<ConfirmationPage> {
 
   @override
   void initState() {
@@ -24,7 +18,14 @@ class _MyConfirmationPageState extends State<MyConfirmationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body:
-      Container(),
+      Container(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            ConfirmationBanner()
+          ],
+        )
+      ),
     );
   }
 }

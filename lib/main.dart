@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wapfau/pages/confirmationPage.dart';
 import 'package:wapfau/pages/coursePage.dart';
 import 'package:wapfau/services/coreService.dart';
 import 'package:wapfau/services/courseService.dart';
@@ -40,8 +41,11 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          child: MyCoursePage(title: 'Kurse', coreService: coreService)
+      body: Container(
+        padding: EdgeInsets.only(top: 48), // for notches
+          child:
+          CoursePage(title: 'Kurse', coreService: coreService)
+          //ConfirmationPage()
       ),
     );
   }

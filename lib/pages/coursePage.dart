@@ -7,15 +7,15 @@ import '../services/courseService.dart';
 import '../widgets/card.dart';
 
 
-class MyCoursePage extends StatefulWidget {
-  const MyCoursePage({super.key, required this.title, required this.coreService});
+class CoursePage extends StatefulWidget {
+  const CoursePage({super.key, required this.title, required this.coreService});
   final String title;
   final CoreService coreService;
   @override
-  State<MyCoursePage> createState() => _MyCoursesPageState();
+  State<CoursePage> createState() => _CoursesPageState();
 }
 
-class _MyCoursesPageState extends State<MyCoursePage> {
+class _CoursesPageState extends State<CoursePage> {
  // eigentlich müsste man hier irgendwie auf die coreService instanz zugreifen können
   int maxCourses = CoreService.getMaxCourses();
   User user = CoreService.getUser();
