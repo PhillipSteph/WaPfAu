@@ -46,7 +46,7 @@ class _CoursesPageState extends State<CoursePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.separated(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 60),
         itemCount: courses.length,
         separatorBuilder: (_, __) => const SizedBox(height: 12),
         itemBuilder: (context, i) {

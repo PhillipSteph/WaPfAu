@@ -8,16 +8,18 @@ import '../models/user.dart';
 class CoreService {
   bool hasBeenInitialized = false;
 
+  late bool selectionDone;
   late User user;
   late int maxCourses;
   late CourseService courseService;
   List<Course> selectedCourses = [];
 
   CoreService() {
-    _initCore();
+    initCore();
   }
 
-  void _initCore() {
+  void initCore() {
+    // backendaufrufe in Zukunft
     if (hasBeenInitialized) return;
 
     user = User(
@@ -29,20 +31,28 @@ class CoreService {
     maxCourses = 2;
 
     hasBeenInitialized = true;
+
+    selectionDone = isSelectionDoneByUser();
   }
 
   User getUser() {
-    if (!hasBeenInitialized) _initCore();
+    if (!hasBeenInitialized) initCore();
     return user;
   }
 
   int getMaxCourses() {
-    if (!hasBeenInitialized) _initCore();
+    if (!hasBeenInitialized) initCore();
     return maxCourses;
   }
 
   CourseService getCourseService() {
-    if (!hasBeenInitialized) _initCore();
+    if (!hasBeenInitialized) initCore();
     return courseService;
+  }
+
+  bool isSelectionDoneByUser() {
+    if (!hasBeenInitialized) initCore();
+    //backend aufruf, ob bereits ausgewählt
+    return selectedCourses.length >= maxCourses;
   }
 }

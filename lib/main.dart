@@ -42,10 +42,9 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.only(top: 48), // for notches
           child:
-          CoursePage(title: 'Kurse', coreService: coreService)
-          //ConfirmationPage(coreService: coreService,)
+          //CoursePage(title: 'Kurse', coreService: coreService)
+          ConfirmationPage(coreService: coreService)
       ),
     );
   }
