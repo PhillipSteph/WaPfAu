@@ -22,14 +22,13 @@ class CourseCard extends StatelessWidget {
     final seatsLeft =
     (course.availableSlots - course.reservedSlots).clamp(-9999, 9999);
 
-    Color normalBg = isSelected ? Colors.red : Colors.black87;
+    Color normalBg = isSelected ? Color(0xFFD4183D) : Colors.black87;
 
     return ConstrainedBox(
       constraints: const BoxConstraints(minWidth: double.infinity),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-            //color: Colors.black.withOpacity(0.03),
             border: Border.all(
               color: Colors.black.withOpacity(0.1),
               width: 1,
@@ -154,7 +153,7 @@ class CourseCard extends StatelessWidget {
                   WidgetStateProperty.resolveWith<Color>((states) {
                     if (states.contains(WidgetState.pressed) && !canBeChosen ) {
                       //return Colors.red.shade700;
-                      return const Color(0xFFD4183D);
+                      return const Color(0xFF000000);
                     }
                     return normalBg;
                   }),
