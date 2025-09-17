@@ -23,6 +23,7 @@ class CourseCard extends StatelessWidget {
     (course.availableSlots - course.reservedSlots).clamp(-9999, 9999);
 
     Color normalBg = isSelected ? Color(0xFFD4183D) : Colors.black87;
+    Color ectsColor = isSelected ? Color(0xFFF5F5F5) : Colors.black87;
 
     return ConstrainedBox(
       constraints: const BoxConstraints(minWidth: double.infinity),
@@ -30,7 +31,8 @@ class CourseCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
             border: Border.all(
-              color: Colors.black.withOpacity(0.1),
+              //color: Color(0xFFD4183D).withOpacity(0.1),
+              color: isSelected ?  Colors.black87.withOpacity(1) : Colors.black87.withOpacity(0.1),
               width: 1,
             ),
             borderRadius: BorderRadius.circular(12)
@@ -53,15 +55,19 @@ class CourseCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 12),
-                Container(
+                Container( //ects container
                   padding:
                   const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceContainerHighest,
+                    color: isSelected ? Color(0xFF000000) : Color(0xFFE0E0E0),//theme.colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(999),
                   ),
-                  child: Text('${course.ects} ECTS',
-                      style: theme.textTheme.labelMedium),
+                  child: Text(
+                    '${course.ects} ECTS',
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      color: ectsColor,
+                    ),
+                  ),
                 ),
               ],
             ),
