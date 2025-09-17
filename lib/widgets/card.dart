@@ -71,7 +71,7 @@ class CourseCard extends StatelessWidget {
               softWrap: true,
               overflow: TextOverflow.visible,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: Colors.grey,
+                color: Color(0xFF717182),
               ),
             ),
             const SizedBox(height: 12),
@@ -86,7 +86,7 @@ class CourseCard extends StatelessWidget {
                     softWrap: true,
                     overflow: TextOverflow.visible,
                     style: TextStyle(
-                      color: Colors.grey
+                      color: Color(0xFF717182),
                     ),
                   ),
                 ),
@@ -102,7 +102,7 @@ class CourseCard extends StatelessWidget {
                   child: Text('LVZ: ${course.lvz}',
                     softWrap: true, overflow: TextOverflow.visible,
                     style: TextStyle(
-                        color: Colors.grey
+                      color: Color(0xFF717182),
                     ),
                   ),
 
@@ -151,10 +151,6 @@ class CourseCard extends StatelessWidget {
                   // pressed state should be red
                   backgroundColor:
                   WidgetStateProperty.resolveWith<Color>((states) {
-                    if (states.contains(WidgetState.pressed) && !canBeChosen ) {
-                      //return Colors.red.shade700;
-                      return const Color(0xFF000000);
-                    }
                     return normalBg;
                   }),
                 ),
