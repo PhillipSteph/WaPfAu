@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wapfau/assets/colors.dart';
 import 'package:wapfau/services/coreService.dart';
 
 import '../../models/course.dart';
@@ -55,7 +56,7 @@ class _ConfirmationCoursesState extends State<ConfirmationCourses> {
                         padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                         margin: EdgeInsets.only(right: 8),
                         decoration: BoxDecoration(
-                            color: Color(0xFF111122),
+                            color: AppColors.courseCounterBg,
                             border: Border.all(
                               color: Colors.black.withOpacity(0.1),
                               width: 1,

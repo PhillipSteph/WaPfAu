@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wapfau/assets/colors.dart';
 
 import '../models/course.dart';
 
@@ -22,8 +23,8 @@ class CourseCard extends StatelessWidget {
     final seatsLeft =
     (course.availableSlots - course.reservedSlots).clamp(-9999, 9999);
 
-    Color normalBg = isSelected ? Color(0xFFD4183D) : Colors.black87;
-    Color ectsColor = isSelected ? Color(0xFFF5F5F5) : Colors.black87;
+    Color normalBg = isSelected ? AppColors.primaryRed : Colors.black87;
+    Color ectsColor = isSelected ? Colors.white : Colors.black87;
 
     return ConstrainedBox(
       constraints: const BoxConstraints(minWidth: double.infinity),
@@ -59,7 +60,7 @@ class CourseCard extends StatelessWidget {
                   padding:
                   const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    color: isSelected ? Color(0xFF000000) : Color(0xFFE0E0E0),//theme.colorScheme.surfaceContainerHighest,
+                    color: isSelected ? Colors.black : AppColors.courseUnselectedEctsBg,//theme.colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: Text(
@@ -77,7 +78,7 @@ class CourseCard extends StatelessWidget {
               softWrap: true,
               overflow: TextOverflow.visible,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: Color(0xFF717182),
+                color: AppColors.textGrey,
               ),
             ),
             const SizedBox(height: 12),
@@ -92,7 +93,7 @@ class CourseCard extends StatelessWidget {
                     softWrap: true,
                     overflow: TextOverflow.visible,
                     style: TextStyle(
-                      color: Color(0xFF717182),
+                      color: AppColors.textGrey,
                     ),
                   ),
                 ),
@@ -108,7 +109,7 @@ class CourseCard extends StatelessWidget {
                   child: Text('LVZ: ${course.lvz}',
                     softWrap: true, overflow: TextOverflow.visible,
                     style: TextStyle(
-                      color: Color(0xFF717182),
+                      color: AppColors.textGrey,
                     ),
                   ),
 
