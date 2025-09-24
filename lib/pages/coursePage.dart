@@ -28,9 +28,7 @@ class _CoursesPageState extends State<CoursePage> {
     maxCourses = widget.coreService.getMaxCourses();
     user = widget.coreService.getUser();
     courseService = widget.coreService.getCourseService();
-
-    // Load courses here
-    courses = courseService.getAllCourses(); // <-- adjust to your API
+    courses = courseService.getAllCourses(); // ggf. an deine API anpassen
   }
 
   void _toggleSelection(Course c) {
@@ -43,10 +41,18 @@ class _CoursesPageState extends State<CoursePage> {
     });
   }
 
+  // null-sichere Suche über Titel, Prof und Beschreibung
+  String _lc(String? s) => (s ?? '').toLowerCase();
+  bool _matchesCourse(Course c, String q) {
+    final qq = q.trim().toLowerCase();
+    return _lc(c.title).contains(qq) ||
+        _lc(c.prof).contains(qq) ||
+        _lc(c.description).contains(qq);
+  }
+
   List<Course> get _filteredCourses {
     if (_query.isEmpty) return courses;
-    final q = _query.toLowerCase();
-    return courses.where((c) => c.title.toLowerCase().contains(q)).toList();
+    return courses.where((c) => _matchesCourse(c, _query)).toList();
   }
 
   @override
@@ -56,11 +62,11 @@ class _CoursesPageState extends State<CoursePage> {
         children: [
           const SizedBox(height: 60),
 
-          // SearchBar
+          // SearchBar ohne Inline-Suggestions
           CourseSearchBar(
             onQueryChanged: (q) => setState(() => _query = q),
             initialQuery: _query,
-            hintText: 'Module durchsuchen ...',
+            hintText: 'Module, Dozent:in oder Beschreibung…',
           ),
 
           Expanded(
