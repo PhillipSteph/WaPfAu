@@ -159,7 +159,6 @@ class CourseCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ).copyWith(
-                  // pressed state should be red
                   backgroundColor:
                   WidgetStateProperty.resolveWith<Color>((states) {
                     return normalBg;
