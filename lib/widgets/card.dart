@@ -23,8 +23,8 @@ class CourseCard extends StatelessWidget {
     final seatsLeft =
     (course.availableSlots - course.reservedSlots).clamp(-9999, 9999);
 
-    Color normalBg = isSelected ? AppColors.primaryRed : Colors.black87;
-    Color ectsColor = isSelected ? Colors.white : Colors.black87;
+    Color normalBg = isSelected ? AppColors.primaryRed : AppColors.black87;
+    Color ectsColor = isSelected ? AppColors.white : AppColors.black87;
 
     return ConstrainedBox(
       constraints: const BoxConstraints(minWidth: double.infinity),
@@ -33,7 +33,7 @@ class CourseCard extends StatelessWidget {
         decoration: BoxDecoration(
             border: Border.all(
               //color: Color(0xFFD4183D).withOpacity(0.1),
-              color: isSelected ?  Colors.black87.withOpacity(1) : Colors.black87.withOpacity(0.1),
+              color: isSelected ?  AppColors.black87.withOpacity(1) : AppColors.black87.withOpacity(0.1),
               width: 1,
             ),
             borderRadius: BorderRadius.circular(12)
@@ -60,7 +60,7 @@ class CourseCard extends StatelessWidget {
                   padding:
                   const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    color: isSelected ? Colors.black : AppColors.courseUnselectedEctsBg,//theme.colorScheme.surfaceContainerHighest,
+                    color: isSelected ? AppColors.black : AppColors.courseUnselectedEctsBg,//theme.colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: Text(
@@ -123,13 +123,13 @@ class CourseCard extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
                   //color: Colors.red.shade700,
-                  color: Color(0xFFD4183D),
+                  color: AppColors.primaryRed,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
                   '$seatsLeft Plätze frei',
                   style: theme.textTheme.labelLarge
-                      ?.copyWith(color: Colors.white),
+                      ?.copyWith(color: AppColors.white),
                 ),
               )
             else
@@ -149,7 +149,7 @@ class CourseCard extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: onToggleSelect,
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white, // text & icon
+                  foregroundColor: AppColors.white, // text & icon
                   backgroundColor: normalBg,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
