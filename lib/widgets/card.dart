@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wapfau/assets/colors.dart';
 
 import '../models/course.dart';
 
@@ -22,8 +23,8 @@ class CourseCard extends StatelessWidget {
     final seatsLeft =
     (course.availableSlots - course.reservedSlots).clamp(-9999, 9999);
 
-    Color normalBg = isSelected ? Color(0xFFD4183D) : Colors.black87;
-    Color ectsColor = isSelected ? Color(0xFFF5F5F5) : Colors.black87;
+    Color normalBg = isSelected ? AppColors.primaryRed : AppColors.black87;
+    Color ectsColor = isSelected ? AppColors.white : AppColors.black87;
 
     return ConstrainedBox(
       constraints: const BoxConstraints(minWidth: double.infinity),
@@ -32,13 +33,11 @@ class CourseCard extends StatelessWidget {
         curve: Curves.easeInOut,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          border: Border.all(
-            color: isSelected
-                ? Colors.black87.withOpacity(1)
-                : Colors.black87.withOpacity(0.1),
-            width: 1,
-          ),
-          borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isSelected ?  AppColors.black87.withOpacity(1) : AppColors.black87.withOpacity(0.1),
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(12)
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,9 +63,7 @@ class CourseCard extends StatelessWidget {
                   padding:
                   const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
-                    color: isSelected
-                        ? const Color(0xFF000000)
-                        : const Color(0xFFE0E0E0),
+                    color: isSelected ? AppColors.black : AppColors.courseUnselectedEctsBg,//theme.colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(999),
                   ),
                   child: AnimatedDefaultTextStyle(
@@ -85,7 +82,7 @@ class CourseCard extends StatelessWidget {
               softWrap: true,
               overflow: TextOverflow.visible,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: Color(0xFF717182),
+                color: AppColors.textGrey,
               ),
             ),
             const SizedBox(height: 12),
@@ -100,7 +97,7 @@ class CourseCard extends StatelessWidget {
                     softWrap: true,
                     overflow: TextOverflow.visible,
                     style: TextStyle(
-                      color: Color(0xFF717182),
+                      color: AppColors.textGrey,
                     ),
                   ),
                 ),
@@ -116,7 +113,7 @@ class CourseCard extends StatelessWidget {
                   child: Text('LVZ: ${course.lvz}',
                     softWrap: true, overflow: TextOverflow.visible,
                     style: TextStyle(
-                      color: Color(0xFF717182),
+                      color: AppColors.textGrey,
                     ),
                   ),
 
@@ -130,13 +127,13 @@ class CourseCard extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
                   //color: Colors.red.shade700,
-                  color: Color(0xFFD4183D),
+                  color: AppColors.primaryRed,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
                   '$seatsLeft Plätze frei',
                   style: theme.textTheme.labelLarge
-                      ?.copyWith(color: Colors.white),
+                      ?.copyWith(color: AppColors.white),
                 ),
               )
             else
@@ -156,7 +153,7 @@ class CourseCard extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: onToggleSelect,
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white, // text & icon
+                  foregroundColor: AppColors.white, // text & icon
                   backgroundColor: normalBg,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),

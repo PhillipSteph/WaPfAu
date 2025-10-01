@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wapfau/assets/colors.dart';
 import 'package:wapfau/services/coreService.dart';
 
 import '../../models/course.dart';
@@ -34,7 +35,7 @@ class _ConfirmationCoursesState extends State<ConfirmationCourses> {
               padding: EdgeInsets.all(16),
               decoration: BoxDecoration(
                   border: Border.all(
-                    color: Colors.black.withOpacity(0.1),
+                    color: AppColors.black.withOpacity(0.1),
                     width: 1,
                   ),
                   borderRadius: BorderRadius.circular(12)
@@ -55,20 +56,20 @@ class _ConfirmationCoursesState extends State<ConfirmationCourses> {
                         padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                         margin: EdgeInsets.only(right: 8),
                         decoration: BoxDecoration(
-                            color: Color(0xFF111122),
+                            color: AppColors.courseCounterBg,
                             border: Border.all(
-                              color: Colors.black.withOpacity(0.1),
+                              color: AppColors.black.withOpacity(0.1),
                               width: 1,
                             ),
                             borderRadius: BorderRadius.circular(8)
                         ),
-                        child: Text("${widget.selectedCourses.length} Module", style: TextStyle(fontSize: 14, color: Colors.white, fontWeight: FontWeight.bold)),
+                        child: Text("${widget.selectedCourses.length} Module", style: TextStyle(fontSize: 14, color: AppColors.white, fontWeight: FontWeight.bold)),
                       ),
                       Container(
                         padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                         decoration: BoxDecoration(
                             border: Border.all(
-                              color: Colors.black.withOpacity(0.1),
+                              color: AppColors.black.withOpacity(0.1),
                               width: 1,
                             ),
                             borderRadius: BorderRadius.circular(8)
@@ -97,14 +98,14 @@ class _ConfirmationCoursesState extends State<ConfirmationCourses> {
                       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.black.withOpacity(0.1)), // optional border
+                        border: Border.all(color: AppColors.black.withOpacity(0.1)), // optional border
                         color: Colors.transparent, // optional background
                       ),
                       child: const Center(
                         child: Text(
                           'Auswahl bearbeiten',
                           style: TextStyle(
-                            color: Colors.black,
+                            color: AppColors.black,
                             fontSize: 14,
                             fontWeight: FontWeight.w600
                           ),
