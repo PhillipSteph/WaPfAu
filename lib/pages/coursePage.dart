@@ -35,7 +35,7 @@ class _CoursesPageState extends State<CoursePage> {
     setState(() {
       if (widget.coreService.selectedCourses.contains(c)) {
         widget.coreService.selectedCourses.remove(c);
-      } else if (widget.coreService.selectedCourses.length < maxCourses) {
+      } else if (widget.coreService.selectedCourses.length < maxCourses && (c.availableSlots - c.reservedSlots) > 0) {
         widget.coreService.selectedCourses.add(c);
       }
     });
