@@ -28,11 +28,12 @@ class CourseCard extends StatelessWidget {
 
     return ConstrainedBox(
       constraints: const BoxConstraints(minWidth: double.infinity),
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeInOut,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
             border: Border.all(
-              //color: Color(0xFFD4183D).withOpacity(0.1),
               color: isSelected ?  AppColors.black87.withOpacity(1) : AppColors.black87.withOpacity(0.1),
               width: 1,
             ),
@@ -56,18 +57,21 @@ class CourseCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 12),
-                Container( //ects container
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 100),
+                  curve: Curves.easeInOut,
                   padding:
                   const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   decoration: BoxDecoration(
                     color: isSelected ? AppColors.black : AppColors.courseUnselectedEctsBg,//theme.colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(999),
                   ),
-                  child: Text(
-                    '${course.ects} ECTS',
-                    style: theme.textTheme.labelMedium?.copyWith(
+                  child: AnimatedDefaultTextStyle(
+                    duration: const Duration(milliseconds: 100),
+                    style: theme.textTheme.labelMedium!.copyWith(
                       color: ectsColor,
                     ),
+                    child: Text('${course.ects} ECTS'),
                   ),
                 ),
               ],

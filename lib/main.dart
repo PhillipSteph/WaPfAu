@@ -43,8 +43,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: Container(
           child:
-          //CoursePage(title: 'Kurse', coreService: coreService)
-          ConfirmationPage(coreService: coreService)
+          CoursePage(title: 'Kurse', coreService: coreService)
+            //ConfirmationPage(coreService: coreService)
       ),
     );
   }
