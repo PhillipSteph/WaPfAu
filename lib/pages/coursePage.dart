@@ -5,7 +5,7 @@ import 'package:wapfau/services/coreService.dart';
 import '../models/course.dart';
 import '../services/courseService.dart';
 import '../widgets/card.dart';
-
+import '../widgets/searchbar.dart';
 
 class CoursePage extends StatefulWidget {
   const CoursePage({super.key, required this.title, required this.coreService});
@@ -20,6 +20,7 @@ class _CoursesPageState extends State<CoursePage> {
   late User user;
   late CourseService courseService;
   late List<Course> courses;
+  String _query = '';
 
   @override
   void initState() {
@@ -27,9 +28,7 @@ class _CoursesPageState extends State<CoursePage> {
     maxCourses = widget.coreService.getMaxCourses();
     user = widget.coreService.getUser();
     courseService = widget.coreService.getCourseService();
-
-    // Load courses here
-    courses = courseService.getAllCourses(); // <-- adjust to your API
+    courses = courseService.getAllCourses(); // ggf. an deine API anpassen
   }
 
   void _toggleSelection(Course c) {
@@ -42,23 +41,52 @@ class _CoursesPageState extends State<CoursePage> {
     });
   }
 
+  // null-sichere Suche über Titel, Prof und Beschreibung
+  String _lc(String? s) => (s ?? '').toLowerCase();
+  bool _matchesCourse(Course c, String q) {
+    final qq = q.trim().toLowerCase();
+    return _lc(c.title).contains(qq) ||
+        _lc(c.prof).contains(qq) ||
+        _lc(c.description).contains(qq);
+  }
+
+  List<Course> get _filteredCourses {
+    if (_query.isEmpty) return courses;
+    return courses.where((c) => _matchesCourse(c, _query)).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.separated(
-        padding: EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 60),
-        itemCount: courses.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 12),
-        itemBuilder: (context, i) {
-          final course = courses[i];
-          final isSelected = widget.coreService.selectedCourses.contains(course);
-          return CourseCard(
-            course: course,
-            isSelected: isSelected,
-            onToggleSelect: () => _toggleSelection(course),
-            canBeChosen: widget.coreService.selectedCourses.length < maxCourses
-          );
-        },
+      body: Column(
+        children: [
+          const SizedBox(height: 60),
+
+          // SearchBar ohne Inline-Suggestions
+          CourseSearchBar(
+            onQueryChanged: (q) => setState(() => _query = q),
+            initialQuery: _query,
+            hintText: 'Module, Dozent:in oder Beschreibung…',
+          ),
+
+          Expanded(
+            child: ListView.separated(
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 8),
+              itemCount: _filteredCourses.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              itemBuilder: (context, i) {
+                final course = _filteredCourses[i];
+                final isSelected = widget.coreService.selectedCourses.contains(course);
+                return CourseCard(
+                  course: course,
+                  isSelected: isSelected,
+                  onToggleSelect: () => _toggleSelection(course),
+                  canBeChosen: widget.coreService.selectedCourses.length < maxCourses,
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
