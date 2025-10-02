@@ -6,21 +6,35 @@ import '../models/course.dart';
 import '../services/courseService.dart';
 import '../widgets/card.dart';
 import '../widgets/searchbar.dart';
+import '../widgets/selectedCoursesCard.dart';
 
 class CoursePage extends StatefulWidget {
   const CoursePage({super.key, required this.title, required this.coreService});
   final String title;
   final CoreService coreService;
+
   @override
   State<CoursePage> createState() => _CoursesPageState();
 }
 
 class _CoursesPageState extends State<CoursePage> {
+  // --- State / Services ---
   late int maxCourses;
   late User user;
   late CourseService courseService;
   late List<Course> courses;
   String _query = '';
+
+  // --- Scroll / Swap-Logik ---
+  final ScrollController _scrollController = ScrollController();
+  final GlobalKey _listHeaderKey = GlobalKey(); // misst die SelectedCoursesCard IN der Liste
+  double _listHeaderHeight = 0;                 // dynamisch (abhängig von Auswahl)
+  bool _showPinnedSummary = false;
+
+  // Konstanten, passend zu deinem ListView
+  static const EdgeInsets _listPadding =
+  EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 8);
+  static const double _separatorHeight = 12;
 
   @override
   void initState() {
@@ -28,9 +42,22 @@ class _CoursesPageState extends State<CoursePage> {
     maxCourses = widget.coreService.getMaxCourses();
     user = widget.coreService.getUser();
     courseService = widget.coreService.getCourseService();
-    courses = courseService.getAllCourses(); // ggf. an deine API anpassen
+    courses = courseService.getAllCourses();
+
+    _scrollController.addListener(_onScroll);
+
+    // Nach dem ersten Build die Header-Höhe messen
+    WidgetsBinding.instance.addPostFrameCallback((_) => _measureListHeader());
   }
 
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  // --- Auswahl-Handling ---
   void _toggleSelection(Course c) {
     setState(() {
       if (widget.coreService.selectedCourses.contains(c)) {
@@ -39,9 +66,14 @@ class _CoursesPageState extends State<CoursePage> {
         widget.coreService.selectedCourses.add(c);
       }
     });
+
+    // Header kann sich in der Höhe ändern -> neu messen, wenn sichtbar
+    if (!_showPinnedSummary) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _measureListHeader());
+    }
   }
 
-  // null-sichere Suche über Titel, Prof und Beschreibung
+  // --- Suche (null-sicher) ---
   String _lc(String? s) => (s ?? '').toLowerCase();
   bool _matchesCourse(Course c, String q) {
     final qq = q.trim().toLowerCase();
@@ -55,33 +87,94 @@ class _CoursesPageState extends State<CoursePage> {
     return courses.where((c) => _matchesCourse(c, _query)).toList();
   }
 
+  // --- Scroll / Swap ---
+  void _onScroll() {
+    // Schwelle: Höhe der SelectedCoursesCard (in der Liste)
+    // + ein Separator darunter + ListView.top-Padding
+    final double threshold = _listHeaderHeight + _separatorHeight + _listPadding.top;
+
+    final bool shouldShowPinned = _scrollController.offset >= threshold - 0.5;
+    if (shouldShowPinned != _showPinnedSummary) {
+      setState(() => _showPinnedSummary = shouldShowPinned);
+    }
+  }
+
+  void _measureListHeader() {
+    final ctx = _listHeaderKey.currentContext;
+    if (ctx == null) return;
+    final RenderObject? ro = ctx.findRenderObject();
+    if (ro is RenderBox) {
+      final h = ro.size.height;
+      if ((h - _listHeaderHeight).abs() > 0.5) {
+        setState(() => _listHeaderHeight = h);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final selected = widget.coreService.selectedCourses;
+    // Wenn die Zusammenfassung oben "angepinnt" wird,
+    // zeigen wir sie NICHT zusätzlich in der Liste.
+    final bool includeHeaderInList = !_showPinnedSummary;
+    final int itemCount = _filteredCourses.length + (includeHeaderInList ? 1 : 0);
+
     return Scaffold(
       body: Column(
         children: [
           const SizedBox(height: 60),
 
-          // SearchBar ohne Inline-Suggestions
-          CourseSearchBar(
-            onQueryChanged: (q) => setState(() => _query = q),
-            initialQuery: _query,
-            hintText: 'Module, Dozent:in oder Beschreibung…',
+          // Oberer Bereich: SearchBar ODER (wenn gescrollt) die SelectedCoursesCard
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            switchInCurve: Curves.easeOut,
+            switchOutCurve: Curves.easeIn,
+            child: _showPinnedSummary
+                ? SelectedCoursesCard(
+              key: const ValueKey('pinnedSummary'),
+              selected: selected,
+              maxCourses: maxCourses,
+              onRemoveCourse: (c) => _toggleSelection(c),
+            )
+                : CourseSearchBar(
+              key: const ValueKey('searchbar'),
+              onQueryChanged: (q) => setState(() => _query = q),
+              initialQuery: _query,
+              hintText: 'Module, Dozent:in oder Beschreibung…',
+            ),
           ),
 
+          // Scroll-Liste: ggf. mit Header als erstem Eintrag
           Expanded(
             child: ListView.separated(
-              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 8),
-              itemCount: _filteredCourses.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              controller: _scrollController,
+              padding: _listPadding,
+              itemCount: itemCount,
+              separatorBuilder: (_, __) => const SizedBox(height: _separatorHeight),
               itemBuilder: (context, i) {
-                final course = _filteredCourses[i];
-                final isSelected = widget.coreService.selectedCourses.contains(course);
+                // 1) Optionaler Header „Gewählte Module“, scrollt mit
+                if (includeHeaderInList && i == 0) {
+                  return KeyedSubtree(
+                    // Key zum Messen der Höhe dieses Headers
+                    key: _listHeaderKey,
+                    child: SelectedCoursesCard(
+                      selected: selected,
+                      maxCourses: maxCourses,
+                      onRemoveCourse: (c) => _toggleSelection(c),
+                    ),
+                  );
+                }
+
+                // 2) Kurskarten
+                final int courseIndex = includeHeaderInList ? i - 1 : i;
+                final course = _filteredCourses[courseIndex];
+                final isSelected = selected.contains(course);
+
                 return CourseCard(
                   course: course,
                   isSelected: isSelected,
                   onToggleSelect: () => _toggleSelection(course),
-                  canBeChosen: widget.coreService.selectedCourses.length < maxCourses,
+                  canBeChosen: selected.length < maxCourses,
                 );
               },
             ),
