@@ -63,20 +63,24 @@ class _CoursesPageState extends State<CoursePage> {
           const SizedBox(height: 60),
 
           // SearchBar ohne Inline-Suggestions
-          CourseSearchBar(
-            onQueryChanged: (q) => setState(() => _query = q),
-            initialQuery: _query,
-            hintText: 'Module, Dozent:in oder Beschreibung…',
-          ),
-
           Expanded(
             child: ListView.separated(
               padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 8),
-              itemCount: _filteredCourses.length,
+              itemCount: _filteredCourses.length + 1, // +1 für die SearchBar
               separatorBuilder: (_, __) => const SizedBox(height: 12),
               itemBuilder: (context, i) {
-                final course = _filteredCourses[i];
+                if (i == 0) {
+                  return CourseSearchBar(
+                    onQueryChanged: (q) => setState(() => _query = q),
+                    initialQuery: _query,
+                    hintText: 'Module, Dozent:in oder Beschreibung',
+                    padding: EdgeInsets.all(0)
+                  );
+                }
+
+                final course = _filteredCourses[i - 1]; // Index verschieben
                 final isSelected = widget.coreService.selectedCourses.contains(course);
+
                 return CourseCard(
                   course: course,
                   isSelected: isSelected,
@@ -85,7 +89,8 @@ class _CoursesPageState extends State<CoursePage> {
                 );
               },
             ),
-          ),
+          )
+
         ],
       ),
     );
