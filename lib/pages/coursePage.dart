@@ -60,9 +60,25 @@ class _CoursesPageState extends State<CoursePage> {
     return Scaffold(
       body: Column(
         children: [
-          const SizedBox(height: 60),
-
-          // SearchBar ohne Inline-Suggestions
+          const SizedBox(height: 40),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.only(left: 24),
+                child: Text(
+                  "angemeldet als ${user.name}",
+                  textAlign: TextAlign.left, // Ensures text alignment within its own box
+                  style: const TextStyle(
+                    fontSize: 20, // Bigger font size
+                    fontWeight: FontWeight.bold, // Thick (bold)
+                    color: Colors.black87,
+                  ),
+                ),
+              )
+            ],
+          ),
           CourseSearchBar(
             onQueryChanged: (q) => setState(() => _query = q),
             initialQuery: _query,
