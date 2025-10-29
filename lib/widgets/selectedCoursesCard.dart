@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:wapfau/models/course.dart';
 
+
+import 'package:flutter/material.dart';
+import 'package:wapfau/services/coreService.dart';
+
+import '../../models/course.dart';
+import '../../pages/coursePage.dart';
+
 /// Karte im Stil "Gewählte Module" mit:
 /// - Überschrift + Zähler (x / max)
 /// - ECTS-Gesamt + Fortschrittsbalken
@@ -93,7 +100,33 @@ class SelectedCoursesCard extends StatelessWidget {
                 course: c,
                 onRemove: () => onRemoveCourse(c),
                 pinnedb: pinnedb,
-              )),
+              )
+              ),
+              SizedBox(height: 10,),
+              SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+
+                },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white, // text & icon
+                  backgroundColor: Colors.grey,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ).copyWith(
+                  // pressed state should be red
+                  backgroundColor:
+                  WidgetStateProperty.resolveWith<Color>((states) {
+                    if (selected.length==2) {
+                      return Colors.green.shade700;
+                    }
+                    return Colors.grey;
+                  }),
+                ),
+                  child: Text('Kurse wählen'),
+              ))
             ],
           ),
         ),
