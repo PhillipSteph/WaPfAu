@@ -1,11 +1,8 @@
 class User {
-  final String nachname;
-  final String vorname;
-  final String matrNR;
-
+  final String name;
+  final String email;
   const User({
-    required this.nachname,
-    required this.vorname,
-    required this.matrNR
+    required this.name,
+    required this.email,
   });
 }

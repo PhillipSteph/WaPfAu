@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:wapfau/pages/ErrorScreen.dart';
 import 'package:wapfau/pages/confirmationPage.dart';
 import 'package:wapfau/pages/coursePage.dart';
 import 'package:wapfau/services/coreService.dart';
 import 'package:wapfau/services/courseService.dart';
 import 'package:wapfau/widgets/card.dart';
 
-import 'models/course.dart';
+import 'api/mockBackend.dart';
 
 void main() {
   runApp(const MyApp());
@@ -43,8 +44,15 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: Container(
           child:
-          CoursePage(title: 'Kurse', coreService: coreService)
-            //ConfirmationPage(coreService: coreService)
+             // falls name und email parameter fehlen, Error Page
+             (coreService.getInitializationError() != null) ?
+             ErrorScreen(message: coreService.getInitializationError()!) :
+             // sonst prüfe, ob bereits ausgewählt über Backend, falls ja, KonfirmationsSeite
+             (MockBackend.alreadySelected() ? ConfirmationPage(coreService: coreService) :
+             // falls nein, Startseite
+             CoursePage(title: 'Kurse', coreService: coreService)
+             )
+            //
       ),
     );
   }
