@@ -8,6 +8,7 @@ import 'package:wapfau/models/course.dart';
 class SelectedCoursesCard extends StatelessWidget {
   const SelectedCoursesCard({
     super.key,
+    this.pinnedb = false,
     required this.selected,
     required this.maxCourses,
     required this.onRemoveCourse,
@@ -15,6 +16,7 @@ class SelectedCoursesCard extends StatelessWidget {
     this.title = 'Gewählte Module',
   });
 
+  final bool pinnedb;
   final List<Course> selected;
   final int maxCourses;
   final void Function(Course course) onRemoveCourse;
@@ -90,7 +92,7 @@ class SelectedCoursesCard extends StatelessWidget {
               ...selected.map((c) => _ChosenCourseTile(
                 course: c,
                 onRemove: () => onRemoveCourse(c),
-                tagText: tagOf?.call(c),
+                pinnedb: pinnedb,
               )),
             ],
           ),
@@ -104,12 +106,12 @@ class _ChosenCourseTile extends StatelessWidget {
   const _ChosenCourseTile({
     required this.course,
     required this.onRemove,
-    this.tagText,
+    this.pinnedb = false
   });
 
+  final bool pinnedb;
   final Course course;
   final VoidCallback onRemove;
-  final String? tagText;
 
   @override
   Widget build(BuildContext context) {
@@ -131,30 +133,19 @@ class _ChosenCourseTile extends StatelessWidget {
               children: [
                 Text(course.title,
                     style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600)),
+                pinnedb ?
+                const SizedBox.shrink():
                 const SizedBox(height: 6),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 6,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  children: [
-                    if ((tagText ?? '').isNotEmpty)
-                      Chip(
-                        label: Text(tagText!, style: theme.textTheme.labelMedium),
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        visualDensity: VisualDensity.compact,
-                        side: BorderSide(color: theme.dividerColor),
-                        backgroundColor: theme.colorScheme.surface,
-                      ),
-                    Chip(
-                      label: Text('${course.ects} ECTS', style: theme.textTheme.labelMedium),
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      visualDensity: VisualDensity.compact,
-                      side: BorderSide(color: theme.dividerColor),
-                      backgroundColor: theme.colorScheme.surface,
-                    ),
-                  ],
+
+                pinnedb ?
+                const SizedBox.shrink():
+                Chip(
+                  label: Text('${course.ects} ECTS', style: theme.textTheme.labelMedium),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  visualDensity: VisualDensity.compact,
+                  side: BorderSide(color: theme.dividerColor),
+                  backgroundColor: theme.colorScheme.surface,
                 ),
               ],
             ),
@@ -167,6 +158,8 @@ class _ChosenCourseTile extends StatelessWidget {
             icon: const Icon(Icons.close),
             splashRadius: 18,
             constraints: const BoxConstraints(),
+            iconSize: 18,
+            padding: EdgeInsetsGeometry.all(0),
           ),
         ],
       ),

@@ -27,7 +27,7 @@ class _CoursesPageState extends State<CoursePage> {
 
   // --- Scroll / Swap-Logik ---
   final ScrollController _scrollController = ScrollController();
-  final GlobalKey _listHeaderKey = GlobalKey(); // misst die SelectedCoursesCard IN der Liste
+  final GlobalKey _listHeaderKey = GlobalKey(); // misst die SelectedCoursesCaard IN der Liste
   double _listHeaderHeight = 0;                 // dynamisch (abhängig von Auswahl)
   bool _showPinnedSummary = false;
 
@@ -89,7 +89,7 @@ class _CoursesPageState extends State<CoursePage> {
 
   // --- Scroll / Swap ---
   void _onScroll() {
-    // Schwelle: Höhe der SelectedCoursesCard (in der Liste)
+    // Schwelle: Höhe der SelectedCoursesCaard (in der Liste)
     // + ein Separator darunter + ListView.top-Padding
     final double threshold = _listHeaderHeight + _separatorHeight + _listPadding.top;
 
@@ -124,7 +124,7 @@ class _CoursesPageState extends State<CoursePage> {
         children: [
           const SizedBox(height: 60),
 
-          // Oberer Bereich: SearchBar ODER (wenn gescrollt) die SelectedCoursesCard
+          // Oberer Bereich: SearchBar ODER (wenn gescrollt) die SelectedCoursesCaard
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 200),
             switchInCurve: Curves.easeOut,
@@ -133,6 +133,7 @@ class _CoursesPageState extends State<CoursePage> {
                 ? SelectedCoursesCard(
               key: const ValueKey('pinnedSummary'),
               selected: selected,
+              pinnedb: true,
               maxCourses: maxCourses,
               onRemoveCourse: (c) => _toggleSelection(c),
             )
@@ -159,6 +160,7 @@ class _CoursesPageState extends State<CoursePage> {
                     key: _listHeaderKey,
                     child: SelectedCoursesCard(
                       selected: selected,
+                      pinnedb: false,
                       maxCourses: maxCourses,
                       onRemoveCourse: (c) => _toggleSelection(c),
                     ),
