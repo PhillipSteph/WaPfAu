@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:wapfau/assets/colors.dart';
 
 import '../../models/course.dart';
 
@@ -19,9 +20,9 @@ class ConfirmationCourseCard extends StatelessWidget {
       child: Container(
          padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.03),
+            color: AppColors.black.withOpacity(0.03),
             border: Border.all(
-              color: Colors.black.withOpacity(0.1),
+              color: AppColors.black.withOpacity(0.1),
               width: 1,
             ),
             borderRadius: BorderRadius.circular(12)

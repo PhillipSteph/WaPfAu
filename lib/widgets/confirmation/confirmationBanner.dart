@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:wapfau/assets/colors.dart';
 class ConfirmationBanner extends StatefulWidget {
   const ConfirmationBanner({super.key});
   @override
@@ -21,9 +21,9 @@ class _ConfirmationBannerState extends State<ConfirmationBanner> {
         child: Container(
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
-                color: Colors.green.withOpacity(0.1),
+                color: AppColors.confirmGreen.withOpacity(0.1),
                 border: Border.all(
-                  color: Colors.green.withOpacity(0.7),
+                  color: AppColors.confirmGreen.withOpacity(0.7),
                   width: 1,
                 ),
                 borderRadius: BorderRadius.circular(12)
@@ -34,19 +34,19 @@ class _ConfirmationBannerState extends State<ConfirmationBanner> {
                   padding: EdgeInsets.only(bottom: 12),
                   child: Icon(
                     Icons.check_circle,
-                    color: Color(0xFF008800),
+                    color: AppColors.confirmGreen,
                     size: 80,
                   ),
                 ),
                 Text(
                     "Modulauswahl erfolgreich gespeichert",
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16, color: Color(0xFF002200))
+                    style: TextStyle(fontSize: 16, color: AppColors.confirmDarkGreen)
                 ),
                 Text(
                     "Ihre Wahlpflichtmodule wurden registriert.",
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16, color: Color(0xFF008800))
+                    style: TextStyle(fontSize: 16, color: AppColors.confirmGreen)
                 )
               ],
             )

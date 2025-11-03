@@ -7,6 +7,7 @@ import 'package:wapfau/services/coreService.dart';
 
 import '../../models/course.dart';
 import '../../pages/coursePage.dart';
+import '../pages/confirmationPage.dart';
 
 /// Karte im Stil "Gewählte Module" mit:
 /// - Überschrift + Zähler (x / max)
@@ -42,7 +43,7 @@ class SelectedCoursesCard extends StatelessWidget {
     final progress = maxCourses > 0 ? _count / maxCourses : 0.0;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Card(
         elevation: 0,
         color: theme.colorScheme.surface,
@@ -114,7 +115,15 @@ class SelectedCoursesCard extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-
+                  var (wasSuccessful, returnedList) = coreService.saveCourses(selected);
+                  //returns true if succeeded to save
+                  if(wasSuccessful){
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ConfirmationPage(coreService: coreService),
+                      ),
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white, // text & icon

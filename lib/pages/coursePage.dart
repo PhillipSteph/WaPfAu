@@ -18,7 +18,6 @@ class CoursePage extends StatefulWidget {
 }
 
 class _CoursesPageState extends State<CoursePage> {
-  // --- State / Services ---
   late int maxCourses;
   late User user;
   late CourseService courseService;
@@ -57,12 +56,11 @@ class _CoursesPageState extends State<CoursePage> {
     super.dispose();
   }
 
-  // --- Auswahl-Handling ---
   void _toggleSelection(Course c) {
     setState(() {
       if (widget.coreService.selectedCourses.contains(c)) {
         widget.coreService.selectedCourses.remove(c);
-      } else if (widget.coreService.selectedCourses.length < maxCourses) {
+      } else if (widget.coreService.selectedCourses.length < maxCourses && (c.availableSlots - c.reservedSlots) > 0) {
         widget.coreService.selectedCourses.add(c);
       }
     });
@@ -73,7 +71,7 @@ class _CoursesPageState extends State<CoursePage> {
     }
   }
 
-  // --- Suche (null-sicher) ---
+  // null-sichere Suche über Titel, Prof und Beschreibung
   String _lc(String? s) => (s ?? '').toLowerCase();
   bool _matchesCourse(Course c, String q) {
     final qq = q.trim().toLowerCase();
@@ -123,7 +121,7 @@ class _CoursesPageState extends State<CoursePage> {
     return Scaffold(
       body: Column(
         children: [
-          const SizedBox(height: 60),
+          const SizedBox(height: 12),
 
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
@@ -175,7 +173,7 @@ class _CoursesPageState extends State<CoursePage> {
               onRemoveCourse: (c) => _toggleSelection(c),
             ),
           ),
-          // Scroll-Liste: ggf. mit Header als erstem Eintrag
+
           Expanded(
             child: ListView.separated(
               controller: _scrollController,
@@ -184,9 +182,6 @@ class _CoursesPageState extends State<CoursePage> {
               itemCount: _filteredCourses.length,
               separatorBuilder: (_, __) => const SizedBox(height: _separatorHeight),
               itemBuilder: (context, i) {
-                // 1) Optionaler Header „Gewählte Module“ is REMOVED.
-                // 2) Kurskarten
-                // The course index is now simply 'i'
                 final course = _filteredCourses[i];
                 final isSelected = selected.contains(course);
 
@@ -194,7 +189,7 @@ class _CoursesPageState extends State<CoursePage> {
                   course: course,
                   isSelected: isSelected,
                   onToggleSelect: () => _toggleSelection(course),
-                  canBeChosen: selected.length < maxCourses,
+                  canBeChosen: widget.coreService.selectedCourses.length < maxCourses,
                 );
               },
             ),
