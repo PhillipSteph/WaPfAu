@@ -1,4 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:wapfau/pages/ErrorScreen.dart';
+import 'package:wapfau/pages/confirmationPage.dart';
+import 'package:wapfau/pages/coursePage.dart';
+import 'package:wapfau/services/coreService.dart';
+import 'package:wapfau/services/courseService.dart';
+import 'package:wapfau/widgets/card.dart';
+
+import 'api/mockBackend.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,9 +21,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Wapfau_test',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.grey),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Wahlpflicht Auswahl'),
     );
   }
 }
@@ -29,38 +37,44 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  CoreService coreService = CoreService();
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  @override
+  void initState() {
+    super.initState();
+
+    // Check for navigation only if initialization was successful.
+    if (coreService.getInitializationError() == null) {
+      // Schedule the navigation to run *after* the first frame is rendered.
+      // This ensures we have a valid BuildContext for Navigator.of(context).
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _checkAndNavigate();
+      });
+    }
+  }
+
+  void _checkAndNavigate() {
+    // If the user has already selected courses, push the ConfirmationPage on top.
+    if (MockBackend.alreadySelected()) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          // Ensure your ConfirmationPage can handle being pushed onto the stack.
+          builder: (context) => ConfirmationPage(coreService: coreService),
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    // 1. Check for initialization error first.
+    if (coreService.getInitializationError() != null) {
+      return ErrorScreen(message: coreService.getInitializationError()!);
+    }
+
+    // 2. If no error, always show the CoursePage as the base screen.
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+      body: CoursePage(title: 'Kurse', coreService: coreService),
     );
   }
 }
