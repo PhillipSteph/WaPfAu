@@ -135,6 +135,7 @@ class _CoursesPageState extends State<CoursePage> {
               selected: selected,
               pinnedb: true,
               maxCourses: maxCourses,
+              coreService: widget.coreService,
               onRemoveCourse: (c) => _toggleSelection(c),
             )
                 : CourseSearchBar(
@@ -162,6 +163,7 @@ class _CoursesPageState extends State<CoursePage> {
                       selected: selected,
                       pinnedb: false,
                       maxCourses: maxCourses,
+                      coreService: widget.coreService,
                       onRemoveCourse: (c) => _toggleSelection(c),
                     ),
                   );

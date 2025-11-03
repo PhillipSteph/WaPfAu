@@ -19,6 +19,7 @@ class SelectedCoursesCard extends StatelessWidget {
     required this.selected,
     required this.maxCourses,
     required this.onRemoveCourse,
+    required this.coreService,
     this.tagOf, // optionales Tag (z. B. Fachbereich) – wird nur angezeigt, wenn vorhanden
     this.title = 'Gewählte Module',
   });
@@ -29,6 +30,7 @@ class SelectedCoursesCard extends StatelessWidget {
   final void Function(Course course) onRemoveCourse;
   final String Function(Course course)? tagOf;
   final String title;
+  final CoreService coreService;
 
   int get _totalEcts => selected.fold<int>(0, (sum, c) => sum + (c.ects));
   int get _count => selected.length;
@@ -119,7 +121,7 @@ class SelectedCoursesCard extends StatelessWidget {
                   // pressed state should be red
                   backgroundColor:
                   WidgetStateProperty.resolveWith<Color>((states) {
-                    if (selected.length==2) {
+                    if (selected.length==coreService.getMaxCourses()) {
                       return Colors.green.shade700;
                     }
                     return Colors.grey;
@@ -192,7 +194,7 @@ class _ChosenCourseTile extends StatelessWidget {
             splashRadius: 18,
             constraints: const BoxConstraints(),
             iconSize: 18,
-            padding: EdgeInsetsGeometry.all(0),
+            padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
           ),
         ],
       ),
