@@ -82,4 +82,10 @@ class CoreService {
     //backend aufruf, ob bereits ausgewählt
     return selectedCourses.length >= maxCourses;
   }
+
+  (bool, List<Course>) saveCourses(List<Course> selectedCourses) {
+    var (successful, returnedList) = MockBackend.saveCourses(selectedCourses);
+    if(successful) selectedCourses = returnedList;
+    return (successful, selectedCourses); //here the selectedCourses get updated based on the backendcall
+  }
 }

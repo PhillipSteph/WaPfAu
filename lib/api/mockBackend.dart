@@ -27,6 +27,9 @@ class MockBackend {
     return getSelectedCoursesByEmail(user.email);
   }
 
+  static (bool, List<Course>) saveCourses(List<Course> selectedCourses) {
+    return MockBackend.updateCoursesByEmail(selectedCourses, user.email);
+  }
 
   // api call funktionen (einzige zu bearbeiten, wenn Backend angebunden wird)
   static int? getMaxCoursesByEmail(String email){
@@ -94,5 +97,13 @@ class MockBackend {
         reservedSlots: 25,
       )
     ];
+  }
+
+  // put / update http request via backend, to adjust the selectedCourses
+
+
+  static (bool, List<Course>) updateCoursesByEmail(List<Course> selectedCourses, String email) {
+    //should return true if it was successfull, then give the selectedCourses based on a new request
+    return (true, selectedCourses);
   }
 }

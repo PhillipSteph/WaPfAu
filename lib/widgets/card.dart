@@ -23,7 +23,7 @@ class CourseCard extends StatelessWidget {
     final seatsLeft =
     (course.availableSlots - course.reservedSlots).clamp(-9999, 9999);
 
-    Color normalBg = isSelected ? AppColors.primaryRed : AppColors.black87;
+    Color normalBg = isSelected ? AppColors.primaryRed : ((seatsLeft > 0) ? AppColors.black87 : AppColors.black87.withOpacity(0.2));
     Color ectsColor = isSelected ? AppColors.white : AppColors.black87;
 
     return ConstrainedBox(
@@ -100,23 +100,6 @@ class CourseCard extends StatelessWidget {
                       color: AppColors.textGrey,
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Icon(Icons.schedule, size: 18),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text('LVZ: ${course.lvz}',
-                    softWrap: true, overflow: TextOverflow.visible,
-                    style: TextStyle(
-                      color: AppColors.textGrey,
-                    ),
-                  ),
-
                 ),
               ],
             ),

@@ -78,41 +78,10 @@ class _ConfirmationCoursesState extends State<ConfirmationCourses> {
                       )
                     ],
                   ),
-                  SpacerWidget(),
                   ...widget.selectedCourses.map((course) => Padding(
-                    padding: const EdgeInsets.only(bottom: 12), // spacing between cards
+                    padding: const EdgeInsets.only(top: 12), // spacing between cards
                     child: ConfirmationCourseCard(course: course),
                   )),
-                  Divider(),
-                  SpacerWidget(height: 8),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CoursePage(title: 'Kurse', coreService: widget.coreService),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: AppColors.black.withOpacity(0.1)), // optional border
-                        color: Colors.transparent, // optional background
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Auswahl bearbeiten',
-                          style: TextStyle(
-                            color: AppColors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
                 ],
               )
           )
