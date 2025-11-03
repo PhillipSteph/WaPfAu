@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wapfau/models/user.dart';
 import 'package:wapfau/services/coreService.dart';
-
+import 'package:flutter/material.dart';
 import '../models/course.dart';
 import '../services/courseService.dart';
 import '../widgets/card.dart';
@@ -93,7 +93,7 @@ class _CoursesPageState extends State<CoursePage> {
     // + ein Separator darunter + ListView.top-Padding
     final double threshold = _listHeaderHeight + _separatorHeight + _listPadding.top;
 
-    final bool shouldShowPinned = _scrollController.offset >= threshold - 0.5;
+    final bool shouldShowPinned = _scrollController.offset >= threshold - 0.9;
     if (shouldShowPinned != _showPinnedSummary) {
       setState(() => _showPinnedSummary = shouldShowPinned);
     }
@@ -114,6 +114,7 @@ class _CoursesPageState extends State<CoursePage> {
   @override
   Widget build(BuildContext context) {
     final selected = widget.coreService.selectedCourses;
+    final bool isSearchVisible = !_showPinnedSummary;
     // Wenn die Zusammenfassung oben "angepinnt" wird,
     // zeigen wir sie NICHT zusätzlich in der Liste.
     final bool includeHeaderInList = !_showPinnedSummary;
@@ -124,54 +125,69 @@ class _CoursesPageState extends State<CoursePage> {
         children: [
           const SizedBox(height: 60),
 
-          // Oberer Bereich: SearchBar ODER (wenn gescrollt) die SelectedCoursesCaard
           AnimatedSwitcher(
-            duration: const Duration(milliseconds: 200),
-            switchInCurve: Curves.easeOut,
-            switchOutCurve: Curves.easeIn,
-            child: _showPinnedSummary
-                ? SelectedCoursesCard(
-              key: const ValueKey('pinnedSummary'),
+            duration: const Duration(milliseconds: 300),
+            // This transition is for the switch between the SearchBar
+            // and the Pinned Summary, when the SearchBar *would* be in
+            // the same spot. Since they are stacked vertically, let's use a FadeThrough.
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return FadeTransition(opacity: animation, child: child);
+              // Or use a more complex one like FadeThroughTransition from package:animations
+            },
+            child: isSearchVisible
+                ? // Key is essential for AnimatedSwitcher to work
+            Column(
+              key: const ValueKey('searchBarArea'),
+              children: [
+                AnimatedOpacity(
+                  // Key change: Use a standard duration for the opacity.
+                  duration: const Duration(milliseconds: 250),
+                  opacity: isSearchVisible ? 1.0 : 0.0,
+                  // Visibility is crucial here: if we set it to false when opacity is 0,
+                  // it won't take up space, achieving the "disappear" effect.
+                  child: isSearchVisible
+                      ? CourseSearchBar(
+                    key: const ValueKey('searchbar'),
+                    onQueryChanged: (q) => setState(() => _query = q),
+                    initialQuery: _query,
+                    hintText: 'Module, Dozent:in oder Beschreibung…',
+                  )
+                      : const SizedBox.shrink(),
+                ),
+                SelectedCoursesCard(
+                  key: const ValueKey('pinnedSummary-always-visible'),
+                  selected: selected,
+                  pinnedb: false,
+                  maxCourses: maxCourses,
+                  coreService: widget.coreService,
+                  onRemoveCourse: (c) => _toggleSelection(c),
+                ),
+              ],
+            )
+                : // Pinned State: Only the SelectedCoursesCard is shown
+            SelectedCoursesCard(
+              // Key must be different from the 'searchBarArea' one.
+              key: const ValueKey('pinnedSummary-only'),
               selected: selected,
               pinnedb: true,
               maxCourses: maxCourses,
               coreService: widget.coreService,
               onRemoveCourse: (c) => _toggleSelection(c),
-            )
-                : CourseSearchBar(
-              key: const ValueKey('searchbar'),
-              onQueryChanged: (q) => setState(() => _query = q),
-              initialQuery: _query,
-              hintText: 'Module, Dozent:in oder Beschreibung…',
             ),
           ),
-
           // Scroll-Liste: ggf. mit Header als erstem Eintrag
           Expanded(
             child: ListView.separated(
               controller: _scrollController,
               padding: _listPadding,
-              itemCount: itemCount,
+              // The itemCount is now just the number of filtered courses
+              itemCount: _filteredCourses.length,
               separatorBuilder: (_, __) => const SizedBox(height: _separatorHeight),
               itemBuilder: (context, i) {
-                // 1) Optionaler Header „Gewählte Module“, scrollt mit
-                if (includeHeaderInList && i == 0) {
-                  return KeyedSubtree(
-                    // Key zum Messen der Höhe dieses Headers
-                    key: _listHeaderKey,
-                    child: SelectedCoursesCard(
-                      selected: selected,
-                      pinnedb: false,
-                      maxCourses: maxCourses,
-                      coreService: widget.coreService,
-                      onRemoveCourse: (c) => _toggleSelection(c),
-                    ),
-                  );
-                }
-
+                // 1) Optionaler Header „Gewählte Module“ is REMOVED.
                 // 2) Kurskarten
-                final int courseIndex = includeHeaderInList ? i - 1 : i;
-                final course = _filteredCourses[courseIndex];
+                // The course index is now simply 'i'
+                final course = _filteredCourses[i];
                 final isSelected = selected.contains(course);
 
                 return CourseCard(

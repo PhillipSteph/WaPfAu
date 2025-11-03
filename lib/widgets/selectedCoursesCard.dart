@@ -32,7 +32,7 @@ class SelectedCoursesCard extends StatelessWidget {
   final String title;
   final CoreService coreService;
 
-  int get _totalEcts => selected.fold<int>(0, (sum, c) => sum + (c.ects));
+  double get _totalEcts => selected.length / maxCourses;
   int get _count => selected.length;
   int get _remaining => (maxCourses - _count).clamp(0, 999);
 
@@ -72,9 +72,7 @@ class SelectedCoursesCard extends StatelessWidget {
               // ECTS + Progress
               Row(
                 children: [
-                  Text('ECTS-Punkte:', style: theme.textTheme.bodyMedium),
                   const SizedBox(width: 8),
-                  Text('$_totalEcts', style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
                 ],
               ),
               const SizedBox(height: 8),
@@ -87,14 +85,21 @@ class SelectedCoursesCard extends StatelessWidget {
                   color: Colors.black87,
                 ),
               ),
-              const SizedBox(height: 8),
 
-              Text(
-                _remaining > 0
-                    ? 'Sie benötigen noch $_remaining weitere Module.'
-                    : 'Sie haben die maximale Anzahl an Modulen gewählt.',
-                style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
-              ),
+              !pinnedb ?
+                  Column(
+                    children: [
+                      SizedBox(height: 8),
+
+                      Text(
+                        _remaining > 0
+                            ? 'Sie benötigen noch $_remaining weitere Module.'
+                            : 'Sie haben die maximale Anzahl an Modulen gewählt.',
+                        style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
+                      )
+                    ],
+                  )
+              : SizedBox.shrink(),
 
               // Liste der gewählten Module
               if (selected.isNotEmpty) const SizedBox(height: 12),
@@ -104,7 +109,7 @@ class SelectedCoursesCard extends StatelessWidget {
                 pinnedb: pinnedb,
               )
               ),
-              SizedBox(height: 10,),
+              SizedBox(height: 10),
               SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -151,9 +156,19 @@ class _ChosenCourseTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
+    // Dynamic styles based on pinnedb
+    final double verticalMargin = pinnedb ? 4 : 8;
+    final double tilePadding = pinnedb ? 8 : 12;
+    final double titleFontSize = pinnedb ? 14 : 16;
+    final FontWeight titleFontWeight = pinnedb ? FontWeight.normal : FontWeight.w600;
+    final double iconSize = 18; // Keeping the icon size constant for clarity
+
     return Container(
-      margin: const EdgeInsets.only(top: 8),
-      padding: const EdgeInsets.all(12),
+      // Smaller top margin when pinned
+      margin: EdgeInsets.only(top: verticalMargin),
+      // Smaller padding when pinned
+      padding: EdgeInsets.all(tilePadding),
       decoration: BoxDecoration(
         color: theme.colorScheme.surfaceVariant.withOpacity(0.35),
         borderRadius: BorderRadius.circular(12),
@@ -166,35 +181,32 @@ class _ChosenCourseTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(course.title,
-                    style: theme.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w600)),
-                pinnedb ?
-                const SizedBox.shrink():
-                const SizedBox(height: 6),
-
-                pinnedb ?
-                const SizedBox.shrink():
-                Chip(
-                  label: Text('${course.ects} ECTS', style: theme.textTheme.labelMedium),
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  visualDensity: VisualDensity.compact,
-                  side: BorderSide(color: theme.dividerColor),
-                  backgroundColor: theme.colorScheme.surface,
+                Text(
+                  course.title,
+                  style: theme.textTheme.bodyLarge?.copyWith(
+                    // Smaller and not bold when pinned
+                    fontSize: titleFontSize,
+                    fontWeight: titleFontWeight,
+                  ),
                 ),
+                // The SizedBox is hidden when pinned (already in the original code)
+                pinnedb ? const SizedBox.shrink() : const SizedBox(height: 6),
               ],
             ),
           ),
 
           // Entfernen
+          // The IconButton size is controlled by iconSize, splashRadius, and constraints.
           IconButton(
             tooltip: 'Entfernen',
             onPressed: onRemove,
             icon: const Icon(Icons.close),
             splashRadius: 18,
+            // Constraints ensure it doesn't take up too much space.
             constraints: const BoxConstraints(),
-            iconSize: 18,
-            padding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+            iconSize: iconSize,
+            // Reduce padding to keep it close to the text
+            padding: EdgeInsets.zero,
           ),
         ],
       ),
