@@ -78,14 +78,10 @@ class _ConfirmationCoursesState extends State<ConfirmationCourses> {
                       )
                     ],
                   ),
-                  SpacerWidget(),
                   ...widget.selectedCourses.map((course) => Padding(
-                    padding: const EdgeInsets.only(bottom: 12), // spacing between cards
+                    padding: const EdgeInsets.only(top: 12), // spacing between cards
                     child: ConfirmationCourseCard(course: course),
                   )),
-                  Divider(),
-                  SpacerWidget(height: 8),
-
                 ],
               )
           )
