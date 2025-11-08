@@ -23,7 +23,7 @@ class CourseCard extends StatelessWidget {
     final seatsLeft =
     (course.availableSlots - course.reservedSlots).clamp(-9999, 9999);
 
-    Color normalBg = isSelected ? AppColors.primaryRed : ((seatsLeft > 0) ? AppColors.black87 : AppColors.black87.withOpacity(0.2));
+    Color normalBg = isSelected ? AppColors.primaryRed : (canBeChosen ? AppColors.black87 : AppColors.black87.withOpacity(0.2));
     Color ectsColor = isSelected ? AppColors.white : AppColors.black87;
 
     return ConstrainedBox(
@@ -147,7 +147,7 @@ class CourseCard extends StatelessWidget {
                     return normalBg;
                   }),
                 ),
-                child: Text(isSelected ? 'Ausgewählt' : 'Auswählen'),
+                child: Text(isSelected ? 'Ausgewählt' : (canBeChosen ? 'Auswählen' : 'Modul ist voll')),
               ),
             ),
           ],

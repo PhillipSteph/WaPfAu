@@ -59,7 +59,16 @@ class _MyHomePageState extends State<MyHomePage> {
       Navigator.of(context).push(
         MaterialPageRoute(
           // Ensure your ConfirmationPage can handle being pushed onto the stack.
-          builder: (context) => ConfirmationPage(coreService: coreService),
+          builder: (context) => Scaffold(
+              body: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(
+                  maxWidth: 600,
+                ),
+                child: ConfirmationPage(coreService: coreService),
+              )
+            )
+          ),
         ),
       );
     }
@@ -69,12 +78,27 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     // 1. Check for initialization error first.
     if (coreService.getInitializationError() != null) {
-      return ErrorScreen(message: coreService.getInitializationError()!);
+      return Scaffold(
+          body: Center(
+            child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: 600,
+                ),
+              child: ErrorScreen(message: coreService.getInitializationError()!)
+            )
+          )
+      );
     }
 
     // 2. If no error, always show the CoursePage as the base screen.
     return Scaffold(
-      body: CoursePage(title: 'Kurse', coreService: coreService),
+        body: Center(
+            child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxWidth: 600,
+                ),
+              child: CoursePage(title: 'Kurse', coreService: coreService),            )
+        )
     );
   }
 }
