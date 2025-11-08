@@ -122,7 +122,7 @@ class _CoursesPageState extends State<CoursePage> {
     return Scaffold(
       body: Column(
         children: [
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
 
           AnimatedSwitcher(
             duration: const Duration(milliseconds: 100),
