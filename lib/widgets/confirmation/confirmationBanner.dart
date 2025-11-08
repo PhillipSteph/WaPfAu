@@ -35,7 +35,7 @@ class _ConfirmationBannerState extends State<ConfirmationBanner> {
                   child: Icon(
                     Icons.check_circle,
                     color: AppColors.confirmGreen,
-                    size: 80,
+                    size: 60,
                   ),
                 ),
                 Text(
