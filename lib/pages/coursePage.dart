@@ -122,10 +122,10 @@ class _CoursesPageState extends State<CoursePage> {
     return Scaffold(
       body: Column(
         children: [
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
 
           AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 100),
             // This transition is for the switch between the SearchBar
             // and the Pinned Summary, when the SearchBar *would* be in
             // the same spot. Since they are stacked vertically, let's use a FadeThrough.

@@ -27,7 +27,7 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body:
-      Container(
+      SingleChildScrollView(
         padding: EdgeInsets.only(left: 16, right: 16, bottom: 16, top: 24),
         child: Column(
           children: [
@@ -46,13 +46,13 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(color: AppColors.black.withOpacity(0.1)), // optional border
-                  color: Colors.transparent, // optional background
+                  color: AppColors.confirmGreenBg,
                 ),
                 child: const Center(
                   child: Text(
                     'Auswahl bearbeiten',
                     style: TextStyle(
-                        color: AppColors.black,
+                        color: AppColors.confirmGreen,
                         fontSize: 14,
                         fontWeight: FontWeight.w600
                     ),

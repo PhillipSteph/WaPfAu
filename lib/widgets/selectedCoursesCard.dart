@@ -43,7 +43,7 @@ class SelectedCoursesCard extends StatelessWidget {
     final progress = maxCourses > 0 ? _count / maxCourses : 0.0;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      padding: const EdgeInsets.only(left: 12, right: 12, bottom: 8),
       child: Card(
         elevation: 0,
         color: theme.colorScheme.surface,
@@ -62,21 +62,14 @@ class SelectedCoursesCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       title,
-                      style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+                      style: pinnedb ? theme.textTheme.titleSmall : theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
                     ),
                   ),
-                  Text('$_count / $maxCourses', style: theme.textTheme.titleMedium),
+                  Text('$_count / $maxCourses', style: pinnedb ? theme.textTheme.titleSmall : theme.textTheme.titleMedium),
                 ],
               ),
-              const SizedBox(height: 8),
-
-              // ECTS + Progress
-              Row(
-                children: [
-                  const SizedBox(width: 8),
-                ],
-              ),
-              const SizedBox(height: 8),
+              if(!pinnedb) const SizedBox(height: 12),
+              if(pinnedb) SizedBox(height: 8),
               ClipRRect(
                 borderRadius: BorderRadius.circular(999),
                 child: LinearProgressIndicator(
@@ -87,7 +80,7 @@ class SelectedCoursesCard extends StatelessWidget {
                 ),
               ),
 
-              !pinnedb ?
+              if(!pinnedb)
                   Column(
                     children: [
                       SizedBox(height: 8),
@@ -99,9 +92,7 @@ class SelectedCoursesCard extends StatelessWidget {
                         style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
                       )
                     ],
-                  )
-              : SizedBox.shrink(),
-
+                  ),
               // Liste der gewählten Module
               if (selected.isNotEmpty) const SizedBox(height: 12),
               ...selected.map((c) => _ChosenCourseTile(
@@ -110,8 +101,8 @@ class SelectedCoursesCard extends StatelessWidget {
                 pinnedb: pinnedb,
               )
               ),
-              SizedBox(height: 10),
-              SizedBox(
+              if (!pinnedb) SizedBox(height: 10),
+              if (!pinnedb) SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
@@ -178,11 +169,12 @@ class _ChosenCourseTile extends StatelessWidget {
     // Dynamic styles based on pinnedb
     final double verticalMargin = pinnedb ? 4 : 8;
     final double tilePadding = pinnedb ? 8 : 12;
-    final double titleFontSize = pinnedb ? 14 : 16;
+    final double titleFontSize = pinnedb ? 12 : 16;
     final FontWeight titleFontWeight = pinnedb ? FontWeight.normal : FontWeight.w600;
-    final double iconSize = 18; // Keeping the icon size constant for clarity
+    final double iconSize = pinnedb ? 18 : 22; // Keeping the icon size constant for clarity
 
     return Container(
+      height: pinnedb ? 34 : 48,
       // Smaller top margin when pinned
       margin: EdgeInsets.only(top: verticalMargin),
       // Smaller padding when pinned
@@ -192,7 +184,7 @@ class _ChosenCourseTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // Titel + Chips
           Expanded(
@@ -208,13 +200,10 @@ class _ChosenCourseTile extends StatelessWidget {
                   ),
                 ),
                 // The SizedBox is hidden when pinned (already in the original code)
-                pinnedb ? const SizedBox.shrink() : const SizedBox(height: 6),
               ],
             ),
           ),
-
           // Entfernen
-          // The IconButton size is controlled by iconSize, splashRadius, and constraints.
           IconButton(
             tooltip: 'Entfernen',
             onPressed: onRemove,
