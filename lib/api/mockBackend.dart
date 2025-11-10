@@ -70,6 +70,56 @@ class MockBackend {
         availableSlots: 20,
         reservedSlots: 10,
       ),
+      Course(
+        id: 'ing',
+        title: 'Informationsverarbeitung',
+        ects: 5,
+        description: 'Automaten, Boolesche Algebra etc.',
+        prof: 'Prof. Dr. Dorendorf',
+        lvz: 2,
+        availableSlots: 25,
+        reservedSlots: 25,
+      ),
+      Course(
+        id: 'algo',
+        title: 'Algorithmen und Datenstrukturen',
+        ects: 6,
+        description: 'Komplexitätstheorie, Sortieralgorithmen, Graphen und Suchverfahren.',
+        prof: 'Prof. Dr. Lena Koch',
+        lvz: 3,
+        availableSlots: 40,
+        reservedSlots: 15,
+      ),
+      Course(
+        id: 'netw',
+        title: 'Rechnernetze und Kommunikationsprotokolle',
+        ects: 5,
+        description: 'Einführung in das OSI-Modell, TCP/IP-Protokolle, Routing und Switching.',
+        prof: 'Dr. Hannes Berger',
+        lvz: 2,
+        availableSlots: 35,
+        reservedSlots: 30,
+      ),
+      Course(
+        id: 'mobd',
+        title: 'Mobile App Entwicklung (Android/iOS)',
+        ects: 6,
+        description: 'Cross-Plattform Entwicklung mit modernen Frameworks, User Experience Design und Testing.',
+        prof: 'Prof. Dr. Max Fischer',
+        lvz: 3,
+        availableSlots: 22,
+        reservedSlots: 18,
+      ),
+      Course(
+        id: 'its',
+        title: 'Grundlagen der IT-Sicherheit',
+        ects: 5,
+        description: 'Kryptographie, Hashing-Verfahren, Angriffsszenarien und grundlegende Abwehrmaßnahmen.',
+        prof: 'Prof. Dr. Silke Roth',
+        lvz: 2,
+        availableSlots: 30,
+        reservedSlots: 5,
+      )
     ];
   }
 
@@ -103,7 +153,7 @@ class MockBackend {
 
 
   static (bool, List<Course>) updateCoursesByEmail(List<Course> selectedCourses, String email) {
-    //should return true if it was successfull, then give the selectedCourses based on a new request
+    //should return true if it was successful, then give the selectedCourses based on a new request
     return (true, selectedCourses);
   }
 }

@@ -120,7 +120,16 @@ class SelectedCoursesCard extends StatelessWidget {
                   if(wasSuccessful){
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => ConfirmationPage(coreService: coreService),
+                        builder: (context) => Scaffold(
+                            body: Center(
+                                child: ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    maxWidth: 600,
+                                  ),
+                                  child: ConfirmationPage(coreService: coreService),
+                                )
+                            )
+                        ),
                       ),
                     );
                   }

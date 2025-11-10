@@ -22,6 +22,8 @@ class _CoursesPageState extends State<CoursePage> {
   late User user;
   late CourseService courseService;
   late List<Course> courses;
+  late List<Course> activeSelection;
+
   String _query = '';
 
   // --- Scroll / Swap-Logik ---
@@ -38,6 +40,7 @@ class _CoursesPageState extends State<CoursePage> {
   @override
   void initState() {
     super.initState();
+    activeSelection = List.from(widget.coreService.selectedCourses);
     maxCourses = widget.coreService.getMaxCourses();
     user = widget.coreService.getUser();
     courseService = widget.coreService.getCourseService();
@@ -58,13 +61,12 @@ class _CoursesPageState extends State<CoursePage> {
 
   void _toggleSelection(Course c) {
     setState(() {
-      if (widget.coreService.selectedCourses.contains(c)) {
-        widget.coreService.selectedCourses.remove(c);
-      } else if (widget.coreService.selectedCourses.length < maxCourses && (c.availableSlots - c.reservedSlots) > 0) {
-        widget.coreService.selectedCourses.add(c);
+      if (activeSelection.contains(c)) {
+        activeSelection.remove(c);
+      } else if (activeSelection.length < maxCourses &&( widget.coreService.selectedCoursesContains(c) || (c.availableSlots - c.reservedSlots) > 0)) {
+        activeSelection.add(c);
       }
     });
-
     // Header kann sich in der Höhe ändern -> neu messen, wenn sichtbar
     if (!_showPinnedSummary) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _measureListHeader());
@@ -111,7 +113,6 @@ class _CoursesPageState extends State<CoursePage> {
 
   @override
   Widget build(BuildContext context) {
-    final selected = widget.coreService.selectedCourses;
     final bool isSearchVisible = !_showPinnedSummary;
     // Wenn die Zusammenfassung oben "angepinnt" wird,
     // zeigen wir sie NICHT zusätzlich in der Liste.
@@ -154,7 +155,7 @@ class _CoursesPageState extends State<CoursePage> {
                 ),
                 SelectedCoursesCard(
                   key: const ValueKey('pinnedSummary-always-visible'),
-                  selected: selected,
+                  selected: activeSelection,
                   pinnedb: false,
                   maxCourses: maxCourses,
                   coreService: widget.coreService,
@@ -166,7 +167,7 @@ class _CoursesPageState extends State<CoursePage> {
             SelectedCoursesCard(
               // Key must be different from the 'searchBarArea' one.
               key: const ValueKey('pinnedSummary-only'),
-              selected: selected,
+              selected: activeSelection,
               pinnedb: true,
               maxCourses: maxCourses,
               coreService: widget.coreService,
@@ -183,13 +184,13 @@ class _CoursesPageState extends State<CoursePage> {
               separatorBuilder: (_, __) => const SizedBox(height: _separatorHeight),
               itemBuilder: (context, i) {
                 final course = _filteredCourses[i];
-                final isSelected = selected.contains(course);
+                final isSelected = activeSelection.contains(course);
 
                 return CourseCard(
                   course: course,
                   isSelected: isSelected,
                   onToggleSelect: () => _toggleSelection(course),
-                  canBeChosen: widget.coreService.selectedCourses.length < maxCourses,
+                  canBeChosen: (widget.coreService.selectedCoursesContains(course) || ((course.availableSlots - course.reservedSlots) > 0)),
                 );
               },
             ),

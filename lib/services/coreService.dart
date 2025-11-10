@@ -85,7 +85,20 @@ class CoreService {
 
   (bool, List<Course>) saveCourses(List<Course> selectedCourses) {
     var (successful, returnedList) = MockBackend.saveCourses(selectedCourses);
-    if(successful) selectedCourses = returnedList;
+    if(successful){
+      this.selectedCourses = List.from(returnedList);
+    }
     return (successful, selectedCourses); //here the selectedCourses get updated based on the backendcall
+  }
+
+  bool selectedCoursesContains(Course c) {
+    bool exists = false;
+    for (var course in selectedCourses) {
+      if (course.id == c.id) {
+        exists = true;
+      }
+      if ( exists ) return true;
+    }
+    return exists;
   }
 }
